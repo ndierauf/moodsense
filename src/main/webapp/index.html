@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Mood Sense Capture Test Page</title>
+  <script src="jquery-3.3.1.min.js"></script>
+  <script src='jquery.iframetracker.js'></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  </head>
+  <body>
+<h1>Mood Sense Capture Test Page</h1>
+<table>
+	<tr>
+		<td width='700px'>
+			<form id='theForm' method='post' action='captureServlet'>
+				<p>User Name: <input name='username' /></p>
+				<p>Capture Type: <select name='captureType'>
+					<option value='HAPPY'>HAPPY</option>
+					<option value='SAD'>SAD</option>
+					<option value='NEUTRAL'>NEUTRAL</option>
+				</select></p>
+				<p>Location (Click on point in Google map below.): <input id='location' readonly name='location' /> </p>
+				<p><input type='submit' /></p>
+			</form>
+		</td>
+		<td>
+			<p>Results:</p>
+			<div id='results'></div>
+		</td>
+	</tr>
+</table>
+    <div style='width:600px; height:500px;' id="map"></div>
+    <script>
+      var map, marker;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 37.60002, lng: -122.38299},
+          zoom: 18
+        });
+        map.addListener('click', function(e) {
+            placeMarkerAndPanTo(e.latLng, map);
+          });
+      }
+
+      function placeMarkerAndPanTo(latLng, map) {
+        if (marker != null) marker.setMap(null);
+    	  marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        });
+        updateMarkerStatus(marker.getPosition());
+      }
+      
+      function updateMarkerStatus(str) {
+        document.getElementById('location').value = str;
+      }
+
+
+      // Capture submit of form, send request using Ajax, populate response in div.
+      $('#theForm').submit(function() { // catch the form's submit event
+    	    $.ajax({ // create an AJAX call...
+    	        data: $(this).serialize(), // get the form data
+    	        type: $(this).attr('method'), // GET or POST
+    	        url: $(this).attr('action'), // the file to call
+    	        success: function(response) { // on success..
+    	            $('#results').html(response); // update the DIV
+    	        }
+    	    });
+    	    return false; // cancel original event to prevent form submitting
+    	});      
+      </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCue0j4sRZ-AoYXG6s14oWKd4uPTg1pnZE&callback=initMap">
+    </script>
+  </body>
+</html>
