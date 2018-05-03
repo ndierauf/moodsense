@@ -56,17 +56,6 @@ public class CaptureServlet extends HttpServlet {
   }
 
 
-  private void displayProximityToLocations(ServletOutputStream outputStream,
-          Capture capture) throws IOException {
-
-    outputStream.println("Proximity to Locations for capture (" + capture.getCaptureType().getCaputureTypeValue() + "): ");
-    final String distanceToWork = this.getDistance(outputStream, capture.getLocation(), HappyLocation.WORK.getLocation());
-    final String distanceToBurgers = this.getDistance(outputStream, capture.getLocation(), HappyLocation.BURGERS.getLocation());
-    final String distanceToGym = this.getDistance(outputStream, capture.getLocation(), HappyLocation.GYM.getLocation());
-    outputStream.println("Work: " + distanceToWork + "<br>In-and-Out Burgers: " + distanceToBurgers + "<br>Gym: " + distanceToGym);
-  }
-
-
   private void displayMoodFrequencyDistribution(ServletOutputStream outputStream,
           Capture capture) throws IOException {
 
@@ -95,6 +84,17 @@ public class CaptureServlet extends HttpServlet {
     }
 
     outputStream.println("Happy: " + happyCount + ", Sad: " + sadCount + ", Neutral: " + neutralCount + "<br>");
+  }
+
+
+  private void displayProximityToLocations(ServletOutputStream outputStream,
+          Capture capture) throws IOException {
+
+    outputStream.println("Proximity to Locations for capture (" + capture.getCaptureType().getCaputureTypeValue() + "): <br>");
+    final String distanceToWork = this.getDistance(outputStream, capture.getLocation(), HappyLocation.WORK.getLocation());
+    final String distanceToBurgers = this.getDistance(outputStream, capture.getLocation(), HappyLocation.BURGERS.getLocation());
+    final String distanceToGym = this.getDistance(outputStream, capture.getLocation(), HappyLocation.GYM.getLocation());
+    outputStream.println("Work: " + distanceToWork + "<br>In-and-Out Burgers: " + distanceToBurgers + "<br>Gym: " + distanceToGym);
   }
 
 
